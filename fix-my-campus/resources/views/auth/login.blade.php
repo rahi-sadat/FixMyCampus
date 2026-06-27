@@ -14,6 +14,10 @@
             <form class="auth-card" action="{{ route('login.attempt') }}" method="post">
                 @csrf
 
+                @if (request()->boolean('login_required'))
+                    <p class="auth-notice">You have to login first.</p>
+                @endif
+
                 <div class="auth-card-head">
                     <h2>Welcome back</h2>
                     <p>Enter your email and password to continue.</p>
@@ -37,6 +41,11 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>
                     Login
                 </button>
+
+                <div class="auth-switch">
+                    <span>Don't have a account?</span>
+                    <a class="auth-register-link" href="{{ route('register') }}">Register Now</a>
+                </div>
             </form>
         </div>
     </section>

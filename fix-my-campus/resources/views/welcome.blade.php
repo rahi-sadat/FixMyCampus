@@ -11,7 +11,7 @@
                 </p>
 
                 <div class="hero-actions">
-                    <a class="button primary" href="#report">
+                    <a class="button primary" href="{{ route('login', ['login_required' => 1]) }}">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
                         Submit a complaint
                     </a>
@@ -100,7 +100,9 @@
                 </ul>
             </div>
 
-            <form class="report-form" action="#" method="post">
+            <form class="report-form" action="{{ route('login') }}" method="get" data-login-required-form data-login-required-url="{{ route('login', ['login_required' => 1]) }}">
+                <input type="hidden" name="login_required" value="1">
+
                 <div class="form-grid">
                     <div class="field">
                         <label for="category">Category</label>
@@ -135,7 +137,7 @@
                 </div>
 
                 <div class="form-footer">
-                    <button class="button primary" type="button">
+                    <button class="button primary" type="submit">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
                         Submit
                     </button>
@@ -144,3 +146,12 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.querySelector('[data-login-required-form]')?.addEventListener('submit', function (event) {
+            event.preventDefault();
+            window.location.href = this.dataset.loginRequiredUrl;
+        });
+    </script>
+@endpush
