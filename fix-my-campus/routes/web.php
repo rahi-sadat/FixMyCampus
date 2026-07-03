@@ -60,10 +60,7 @@ Route::post('/register', function (Request $request) {
 
     $user = User::create($userData);
 
-    Auth::login($user);
-
-    $dashboard = $roleName === 'staff' ? '/staff/dashboard' : '/student/dashboard';
-    return redirect()->intended($dashboard)->with('registration_status', 'Your account has been created successfully.');
+    return redirect()->route('login')->with('registration_status', 'Your account has been created successfully. Please login.');
 })->name('register.store');
 
 Route::post('/login', function (Request $request) {
