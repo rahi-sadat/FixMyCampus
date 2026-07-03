@@ -53,7 +53,7 @@ Route::post('/register', function (Request $request) {
 
     Auth::login($user);
 
-    return redirect()->intended('/')->with('registration_status', 'Your account has been created successfully.');
+    return redirect()->intended('/student/dashboard')->with('registration_status', 'Your account has been created successfully.');
 })->name('register.store');
 
 Route::post('/login', function (Request $request) {
@@ -64,6 +64,16 @@ Route::post('/login', function (Request $request) {
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
+
+        $role = Auth::user()->role->role_name ?? null;
+
+        if ($role === 'admin') {
+            return redirect()->intended('/admin/dashboard');
+        } elseif ($role === 'staff') {
+            return redirect()->intended('/staff/dashboard');
+        } elseif ($role === 'student') {
+            return redirect()->intended('/student/dashboard');
+        }
 
         return redirect()->intended('/');
     }
