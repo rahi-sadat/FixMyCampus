@@ -29,18 +29,26 @@
 
                 <div class="form-grid">
                     <div class="field full">
+                        <label for="role">Register As</label>
+                        <select id="role" class="input" name="role" required>
+                            <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
+                            <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Maintenance Staff</option>
+                        </select>
+                    </div>
+
+                    <div class="field full">
                         <label for="name">Full Name</label>
                         <input id="name" class="input" name="name" type="text" value="{{ old('name') }}" placeholder="Enter your full name" autocomplete="name" required>
                     </div>
 
                     <div class="field">
-                        <label for="roll">Roll</label>
-                        <input id="roll" class="input" name="roll" type="text" value="{{ old('roll') }}" placeholder="Enter your roll" required>
+                        <label for="roll">ID Number (Roll/Staff ID)</label>
+                        <input id="roll" class="input" name="roll" type="text" value="{{ old('roll') }}" placeholder="Enter your ID" required>
                     </div>
 
                     <div class="field">
-                        <label for="batch">Batch</label>
-                        <input id="batch" class="input" name="batch" type="text" value="{{ old('batch') }}" placeholder="Enter your batch" required>
+                        <label for="batch">Department/Batch</label>
+                        <input id="batch" class="input" name="batch" type="text" value="{{ old('batch') }}" placeholder="Enter your department or batch" required>
                     </div>
 
                     <div class="field full">
