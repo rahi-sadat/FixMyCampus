@@ -21,6 +21,7 @@ Route::get('/register', function () {
 
 Route::post('/register', function (Request $request) {
     $request->validate([
+        'role' => ['required', 'string', 'in:student,staff'],
         'name' => ['required', 'string', 'max:100'],
         'roll' => ['required', 'string', 'max:50'],
         'batch' => ['required', 'string', 'max:50'],
@@ -28,32 +29,38 @@ Route::post('/register', function (Request $request) {
         'password' => ['required', 'confirmed', 'min:8'],
     ]);
 
+    $roleName = $request->role;
     $roleId = DB::table('roles')
-        ->where('role_name', 'student')
+        ->where('role_name', $roleName)
         ->value('id');
 
     if (! $roleId) {
         $roleId = DB::table('roles')->insertGetId([
-            'role_name' => 'student',
-            'description' => 'Student role',
+            'role_name' => $roleName,
+            'description' => ucfirst($roleName) . ' role',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
     }
 
-    $user = User::create([
+    $userData = [
         'role_id' => $roleId,
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        'student_id' => $request->roll,
         'department' => $request->batch,
         'status' => 'active',
-    ]);
+    ];
 
-    Auth::login($user);
+    if ($roleName === 'staff') {
+        $userData['staff_id'] = $request->roll;
+    } else {
+        $userData['student_id'] = $request->roll;
+    }
 
-    return redirect()->intended('/student/dashboard')->with('registration_status', 'Your account has been created successfully.');
+    $user = User::create($userData);
+
+    return redirect()->route('login')->with('registration_status', 'Your account has been created successfully. Please login.');
 })->name('register.store');
 
 Route::post('/login', function (Request $request) {
