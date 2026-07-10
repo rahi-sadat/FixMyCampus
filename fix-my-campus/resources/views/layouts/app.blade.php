@@ -11,6 +11,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+        @foreach (glob(public_path('css/features/*.css')) ?: [] as $featureStylesheet)
+            <link rel="stylesheet" href="{{ asset('css/features/'.basename($featureStylesheet)) }}">
+        @endforeach
     @endif
 
     @stack('styles')
@@ -27,19 +30,51 @@
 
             <nav class="nav-links" aria-label="Primary navigation">
                 <a href="{{ url('/') }}">Home</a>
-                <a href="{{ url('/#features') }}">Features</a>
-                <a href="{{ url('/#report') }}">Report</a>
+                @auth
+                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                    @if (auth()->user()->isRole('admin'))
+                        <a href="{{ route('admin.complaints.index') }}">Complaints</a>
+                        <a href="{{ route('admin.reports.index') }}">Reports</a>
+                    @elseif (auth()->user()->isRole('staff'))
+                        <a href="{{ route('staff.complaints.index') }}">Assignments</a>
+                    @else
+                        <a href="{{ route('complaints.index') }}">Complaints</a>
+                    @endif
+                @else
+                    <a href="{{ url('/#features') }}">Features</a>
+                    <a href="{{ url('/#report') }}">Report</a>
+                @endauth
             </nav>
 
             <div class="nav-actions">
-                <a class="nav-login" href="{{ route('login') }}">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>
-                    Login
-                </a>
-                <a class="nav-cta" href="{{ route('login', ['login_required' => 1]) }}">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-                    New Complaint
-                </a>
+                @auth
+                    <a class="nav-login" href="{{ route('dashboard') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 5v12"/></svg>
+                        Dashboard
+                    </a>
+                    @if (auth()->user()->isRole('student'))
+                        <a class="nav-cta" href="{{ route('complaints.create') }}">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                            New Complaint
+                        </a>
+                    @endif
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button class="nav-login nav-logout" type="submit">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a class="nav-login" href="{{ route('login') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>
+                        Login
+                    </a>
+                    <a class="nav-cta" href="{{ route('login', ['login_required' => 1]) }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                        New Complaint
+                    </a>
+                @endauth
             </div>
         </div>
     </header>
@@ -64,8 +99,19 @@
                 <a class="footer-link" href="{{ url('/') }}">Home</a>
                 <a class="footer-link" href="{{ url('/#features') }}">Features</a>
                 <a class="footer-link" href="{{ url('/#report') }}">Report</a>
-                <a class="footer-link" href="{{ route('login') }}">Login</a>
-                <a class="footer-link primary" href="{{ url('/#report') }}">New complaint</a>
+                @auth
+                    <a class="footer-link" href="{{ route('dashboard') }}">Dashboard</a>
+                    @if (auth()->user()->isRole('admin'))
+                        <a class="footer-link primary" href="{{ route('admin.complaints.index') }}">Complaints</a>
+                    @elseif (auth()->user()->isRole('staff'))
+                        <a class="footer-link primary" href="{{ route('staff.complaints.index') }}">Assignments</a>
+                    @else
+                        <a class="footer-link primary" href="{{ route('complaints.index') }}">Complaints</a>
+                    @endif
+                @else
+                    <a class="footer-link" href="{{ route('login') }}">Login</a>
+                    <a class="footer-link primary" href="{{ url('/#report') }}">New complaint</a>
+                @endauth
             </nav>
         </div>
 

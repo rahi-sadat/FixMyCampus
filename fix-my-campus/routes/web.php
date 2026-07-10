@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\DashboardController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +39,7 @@ Route::post('/register', function (Request $request) {
     if (! $roleId) {
         $roleId = DB::table('roles')->insertGetId([
             'role_name' => $roleName,
-            'description' => ucfirst($roleName) . ' role',
+            'description' => ucfirst($roleName).' role',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -89,3 +91,21 @@ Route::post('/login', function (Request $request) {
         ->withErrors(['email' => 'The provided credentials do not match our records.'])
         ->onlyInput('email');
 })->name('login.attempt');
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('login')->with('status', 'You have been logged out.');
+})->middleware('auth')->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::delete('/admin/users/{user}', [UserManagementController::class, 'destroy'])->name('admin.users.destroy');
+});
+
+foreach (glob(__DIR__.'/features/*.php') as $featureRoutes) {
+    require $featureRoutes;
+}
