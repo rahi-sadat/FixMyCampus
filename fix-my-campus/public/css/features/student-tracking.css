@@ -1,0 +1,17 @@
+.tracking-toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+}
+
+.tracking-detail .feedback-panel {
+    margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+    .tracking-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
