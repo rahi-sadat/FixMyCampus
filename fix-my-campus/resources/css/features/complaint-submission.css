@@ -1,0 +1,12 @@
+.submission-form {
+    max-width: 920px;
+    margin-inline: auto;
+}
+
+.submission-form .field-hint {
+    margin-top: 0.45rem;
+}
+
+.submission-form .file-input {
+    padding-block: 0.7rem;
+}
