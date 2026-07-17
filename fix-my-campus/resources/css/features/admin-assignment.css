@@ -1,0 +1,9 @@
+.assignment-summary {
+    display: grid;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+}
+
+.assignment-summary span {
+    color: var(--muted, #64748b);
+}
