@@ -1,0 +1,7 @@
+.feedback-panel {
+    border-color: rgba(37, 99, 235, 0.22);
+}
+
+.feedback-rating {
+    max-width: 180px;
+}

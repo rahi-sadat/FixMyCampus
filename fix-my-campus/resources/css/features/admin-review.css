@@ -1,0 +1,13 @@
+.complaint-filters {
+    display: grid;
+    grid-template-columns: minmax(220px, 2fr) repeat(3, minmax(140px, 1fr)) auto;
+    gap: 0.75rem;
+    align-items: end;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+    .complaint-filters {
+        grid-template-columns: 1fr 1fr;
+    }
+}
