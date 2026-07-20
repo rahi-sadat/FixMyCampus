@@ -13,7 +13,7 @@ class StaffDashboardController extends Controller
         abort_unless($request->user()->isRole('staff'), 403);
 
         $complaints = Complaint::query()
-            ->with(['student', 'category', 'location'])
+            ->with(['student', 'category', 'location', 'images.uploader'])
             ->where('current_staff_id', $request->user()->id)
             ->latest()->get();
 

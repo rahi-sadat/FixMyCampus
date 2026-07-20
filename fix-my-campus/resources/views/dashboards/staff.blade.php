@@ -41,11 +41,21 @@
 
                 <div class="complaint-list">
                     @forelse ($complaints as $complaint)
+                        @php
+                            $latestImage = $complaint->images->sortByDesc('created_at')->first();
+                        @endphp
                         <a class="complaint-row" href="{{ route('staff.complaints.show', $complaint) }}">
                             <div>
                                 <span class="status-badge {{ $complaint->priority }}">{{ ucfirst($complaint->priority) }}</span>
                                 <strong>{{ $complaint->title }}</strong>
                                 <p>{{ $complaint->category->category_name }} · {{ $complaint->location->label() }}</p>
+                            </div>
+                            <div class="row-actions" style="align-items:center; gap:12px;">
+                                @if ($latestImage)
+                                    <img src="{{ asset('storage/'.$latestImage->image_path) }}" alt="{{ $latestImage->image_name ?? 'Complaint image' }}" style="width:56px; height:56px; object-fit:cover; border-radius:12px;">
+                                @else
+                                    <span class="muted">No image</span>
+                                @endif
                             </div>
                             <span class="status-badge {{ $complaint->status }}">{{ ucwords(str_replace('_', ' ', $complaint->status)) }}</span>
                         </a>

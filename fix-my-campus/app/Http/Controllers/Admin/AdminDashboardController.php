@@ -17,7 +17,7 @@ class AdminDashboardController extends Controller
         $statusCounts = Complaint::query()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status');
         $priorityCounts = Complaint::query()->selectRaw('priority, count(*) as total')->groupBy('priority')->pluck('total', 'priority');
         $categoryCounts = ComplaintCategory::query()->withCount('complaints')->orderByDesc('complaints_count')->get();
-        $complaints = Complaint::query()->with(['student', 'category', 'location', 'currentStaff'])->latest()->take(8)->get();
+        $complaints = Complaint::query()->with(['student', 'category', 'location', 'currentStaff', 'images.uploader'])->latest()->take(8)->get();
         $staff = User::query()
             ->whereHas('role', fn ($query) => $query->where('role_name', 'staff'))
             ->withCount(['assignedComplaints as open_assignments_count' => fn ($query) => $query->whereNotIn('status', ['resolved', 'closed'])])

@@ -64,11 +64,15 @@
                                     <th>Student</th>
                                     <th>Status</th>
                                     <th>Staff</th>
+                                    <th>Images</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($complaints as $complaint)
+                                    @php
+                                        $latestImage = $complaint->images->sortByDesc('created_at')->first();
+                                    @endphp
                                     <tr>
                                         <td><a href="{{ route('admin.complaints.show', $complaint) }}">{{ $complaint->complaint_no }}</a></td>
                                         <td>
@@ -79,6 +83,15 @@
                                         <td><span class="status-badge {{ $complaint->status }}">{{ ucwords(str_replace('_', ' ', $complaint->status)) }}</span></td>
                                         <td>{{ $complaint->currentStaff->name ?? 'Unassigned' }}</td>
                                         <td>
+                                            @if ($latestImage)
+                                                <a href="{{ asset('storage/'.$latestImage->image_path) }}" target="_blank" rel="noopener" title="Open complaint image">
+                                                    <img src="{{ asset('storage/'.$latestImage->image_path) }}" alt="{{ $latestImage->image_name ?? 'Complaint image' }}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 12px; display: block;">
+                                                </a>
+                                            @else
+                                                <span class="muted">No image</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <form action="{{ route('admin.complaints.destroy', $complaint) }}" method="post" onsubmit="return confirm('Delete complaint {{ $complaint->complaint_no }}? This cannot be undone.');">
                                                 @csrf
                                                 @method('delete')
@@ -88,7 +101,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="empty-cell">No complaints yet.</td>
+                                        <td colspan="7" class="empty-cell">No complaints yet.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
