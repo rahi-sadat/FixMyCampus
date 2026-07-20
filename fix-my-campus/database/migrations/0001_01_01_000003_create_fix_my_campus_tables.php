@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * mysql -u root -h 127.0.0.1 fix_my_campus -e "SHOW TABLES;"
      */
     public function up(): void
     {
