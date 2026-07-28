@@ -14,7 +14,7 @@ FixMyCampus is a Laravel-based campus complaint and maintenance management syste
 
 - PHP 8.2+
 - Laravel 12
-- MySQL
+- SQLite by default, configurable through Laravel environment variables
 - Vite 7
 - Tailwind CSS 4
 - PHPUnit 11
@@ -23,26 +23,24 @@ FixMyCampus is a Laravel-based campus complaint and maintenance management syste
 
 ```text
 .
-+-- README.md
-`-- fix-my-campus/
-    +-- app/
-    +-- database/
-    +-- public/
-    +-- resources/
-    +-- routes/
-    +-- tests/
-    +-- composer.json
-    `-- package.json
++-- app/
++-- database/
++-- public/
++-- resources/
++-- routes/
++-- tests/
++-- composer.json
++-- package.json
+`-- README.md
 ```
 
-The Laravel application lives in `fix-my-campus/`. Run framework, Composer, npm, and Artisan commands from that directory.
-
 ## Getting Started
+
+Run these commands from this `fix-my-campus/` directory.
 
 1. Install PHP dependencies:
 
    ```bash
-   cd fix-my-campus
    composer install
    ```
 
@@ -105,10 +103,9 @@ After running the database seeder, these accounts are available:
 
 ## Testing
 
-Run the test suite from the Laravel app directory:
+Run the test suite from this directory:
 
 ```bash
-cd fix-my-campus
 php artisan test
 ```
 
